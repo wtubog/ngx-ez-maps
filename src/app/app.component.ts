@@ -6,7 +6,9 @@ import { Observable } from 'rxjs/Observable';
 
 
 import { } from '@types/google-maps';
-import { switchMap, tap } from 'rxjs/operators';
+import { switchMap, tap, take, delay } from 'rxjs/operators';
+
+import 'rxjs/add/observable/of';
 
 @Component({
   selector: 'app-root',
@@ -23,15 +25,24 @@ export class AppComponent implements OnInit {
     private cdr: ChangeDetectorRef
   ) {}
 
-  @ViewChild('map')
   private _map: EzMap;
 
   pos$: Observable<google.maps.LatLng>;
+  curPos: any;
 
   markers$: Observable<google.maps.places.PlaceResult[]>;
-  
+
   ngOnInit() {
-    this.pos$ = this._ls.getCurrentLocation();
+    this.pos$ = this._ls.getCurrentLocation()
+      .pipe(
+        take(1),
+        tap((data: any) => {
+          this.curPos = {
+            lat: data.coords.latitude,
+            lng: data.coords.longitude
+          }
+        })
+      );
   }
 
   onBounds(data) {
@@ -39,7 +50,17 @@ export class AppComponent implements OnInit {
   }
 
   onCenter(data){
-    console.log(data);
+    console.log("Center changed");
+    this._places.nearbySearch(this._map, {
+      keyword: "veterinary grooming",
+      radius: 5000,
+      location: {
+        lat: data.lat(),
+        lng: data.lng()
+      }
+    }).subscribe((data) => {
+      console.log(data);
+    })
   }
 
   onZoom(data){
@@ -50,17 +71,12 @@ export class AppComponent implements OnInit {
     console.log('checking...');
   }
 
-  onMapReady() {
-    
-    this.markers$ = this._ls.getCurrentLocation()
-      .pipe(
-        switchMap((pos: any) => {
-          return this._places.nearbySearch(this._map, {
-            keyword: "veterinary clinic grooming",
-            radius: 3000,
-            location: {lat: pos.coords.latitude, lng: pos.coords.longitude}
-          })
-        })
-      )
+  onMapReady(map) {
+    this._map = map;
+    this.markers$ = this._places.nearbySearch(map, {
+      keyword: "veterinary grooming",
+      radius: 5000,
+      location: this.curPos
+    }).pipe(tap((data) => console.log(data)));
   }
 }

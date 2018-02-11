@@ -4,12 +4,14 @@ import { Component, OnInit, ElementRef, ViewChild, Output, EventEmitter, Input, 
 
 import { } from '@types/google-maps';
 import { Subject } from 'rxjs/Subject';
+import { SimpleChange } from '@angular/core';
+import { OnChanges } from '@angular/core';
 
 @Component({
     selector: 'ez-map',
     template: `
         <div id='map' #map>
-            <ng-template [ngTemplateOutlet]="markersTempRef"></ng-template>
+            <ng-content></ng-content>
         </div>
     `,
     styles: [
@@ -30,7 +32,7 @@ export class EzMap implements OnInit {
     private _mapInstance: google.maps.Map;
 
     @Output()
-    mapReady = new EventEmitter<boolean>();
+    mapReady = new EventEmitter<google.maps.Map>();
 
     @Output()
     boundsChanged = new EventEmitter<google.maps.LatLngBounds>();
@@ -59,14 +61,14 @@ export class EzMap implements OnInit {
         zoom: 12,
         center: { lat: 120.9842, lng: 14.5995 },
     }
-    
+
     constructor(private _gmap: GoogleMaps) {}
-    
+
     ngOnInit() {
         this._buildConfig();
         this._gmap.createMap(this._mapEl, this._mapConfig).subscribe((map) => {
             this._mapInstance = map;
-            this.mapReady.next(true);
+            this.mapReady.next(this._mapInstance);
             this._bindMapEvents();
         });
     }
@@ -102,5 +104,9 @@ export class EzMap implements OnInit {
     ngDoCheck() {
         console.log("map checking...")
     }
-    
+
+    ngOnChanges(changes: SimpleChange) {
+      console.log(changes);
+    }
+
 }

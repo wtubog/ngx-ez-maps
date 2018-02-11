@@ -1,30 +1,35 @@
-<ez-map 
-    *ngIf="(pos$ | async) as pos" 
-    [latitude]="pos.coords.latitude" 
+<ez-map
+    *ngIf="(pos$ | async) as pos"
+    [latitude]="pos.coords.latitude"
     [longitude]="pos.coords.longitude"
     [zoom]="12"
-    (mapReady)="onMapReady()"
-    [markersTempRef]="markers"
+    (mapReady)="onMapReady($event)"
+    (centerChanged)="onCenter($event)"
     #map
     >
+    <ez-marker
+        [longitude]="pos.coords.longitude"
+        [latitude]="pos.coords.latitude"
+        [animation]="'DROP'">
+    </ez-marker>
 
-    <ng-template #markers>
-        <ez-marker
-            [longitude]="pos.coords.longitude" 
-            [latitude]="pos.coords.latitude"
-            [animation]="'DROP'">
-        </ez-marker>
+    <ez-marker
+        *ngFor="let marker of (markers$ | async)"
+        [latitude]="marker.geometry.location.lat()"
+        [longitude]="marker.geometry.location.lng()"
+        [animation]="'DROP'"></ez-marker>
 
-        <ez-marker 
-            *ngFor="let marker of (markers$ | async)"
-            [latitude]="marker.geometry.location.lat()"
-            [longitude]="marker.geometry.location.lng()"
-            [animation]="'DROP'"></ez-marker>
-    </ng-template>
-   
 </ez-map>
+<!--
+<div *ngFor="let obj of (names$ | async)">
+{{ obj.name }}
+</div> -->
 
-<div  *ngFor="let marker of (markers$ | async)" >{{marker.geometry.location.lat()}}</div>
+<!-- <div *ngFor="let marker of (markers$ | async)">
+  {{ marker.id }}
+</div> -->
+
+<!-- <div  *ngFor="let marker of (markers$ | async)" >{{marker.geometry.location.lat()}}</div> -->
 
     <!-- (zoomChanged)="onZoom($event)"
     (boundsChanged)="onBounds($event)"

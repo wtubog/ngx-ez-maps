@@ -1,18 +1,25 @@
 import { EzMap } from './../directives/ez-map.component';
-import { Injectable } from "@angular/core";
+import { Injectable, NgZone, Inject } from "@angular/core";
 import { Observable } from 'rxjs/Observable';
 
 @Injectable()
 export class PlacesService {
-    
-    nearbySearch(map: EzMap, request: google.maps.places.PlaceSearchRequest): Observable<google.maps.places.PlaceResult[]> {
+
+  constructor(
+    private _zone: NgZone
+  ) {}
+
+    nearbySearch(map: any, request: google.maps.places.PlaceSearchRequest): Observable<google.maps.places.PlaceResult[]> {
         return Observable.create((observer) => {
-            const places = new google.maps.places.PlacesService(map.getMapInstance());
+            const places = new google.maps.places.PlacesService(map);
             places.nearbySearch(
-                request, 
-                (result) => observer.next(result)
+                request,
+                (result) => this._zone.runGuarded(() => {
+                  observer.next(result);
+                  observer.complete();
+                })
             );
-            
+
         })
     }
 
@@ -21,7 +28,9 @@ export class PlacesService {
             const places = new google.maps.places.PlacesService(map.getMapInstance());
             places.textSearch(
                 request,
-                (result) => observer.next(result)
+                (result) => this._zone.runGuarded(() => {
+                  observer.next(result);
+                })
             );
         });
     }
@@ -31,7 +40,9 @@ export class PlacesService {
             const places = new google.maps.places.PlacesService(map.getMapInstance());
             places.getDetails(
                 request,
-                (result) => observer.next(result)
+                (result) => this._zone.runGuarded(() => {
+                  observer.next(result);
+                })
             )
         });
     }

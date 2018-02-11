@@ -1,12 +1,14 @@
 import { map } from 'rxjs/operators';
 import { GoogleMaps } from './../libs/google-maps';
 import { EzMap } from './ez-map.component';
-import { Directive, OnInit, Host, Input, OnDestroy } from "@angular/core";
+import { Component, Directive, OnInit, Host, Input, OnDestroy, ChangeDetectionStrategy } from "@angular/core";
 
 import { } from '@types/google-maps';
 
-@Directive({
-    selector: 'ez-marker'
+@Component({
+    selector: 'ez-marker',
+    template: `<ng-content></ng-content>`,
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EzMarker implements OnInit, OnDestroy {
 
@@ -22,12 +24,12 @@ export class EzMarker implements OnInit, OnDestroy {
     private _markerConfig: google.maps.MarkerOptions;
 
     private _markerInstance: google.maps.Marker;
-        
+
     constructor(
         @Host() private _map: EzMap,
         private _gm: GoogleMaps
     ) {}
-    
+
     ngOnInit() {
         this._buildConfig();
         this._gm.createMarker(this._markerConfig)
