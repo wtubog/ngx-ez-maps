@@ -1,3 +1,5 @@
+import { take } from 'rxjs/operators';
+import { MapManager } from './../map-manager.service';
 import { GoogleMaps } from './../libs/google-maps';
 import { AppInitService } from './../app-init.service';
 import { Component, OnInit, ElementRef, ViewChild, Output, EventEmitter, Input, ChangeDetectionStrategy, TemplateRef } from '@angular/core';
@@ -22,6 +24,10 @@ import { OnChanges } from '@angular/core';
                 position: relative
             }
         `
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [
+      MapManager
     ]
 })
 export class EzMap implements OnInit {
@@ -53,7 +59,34 @@ export class EzMap implements OnInit {
     zoom: number;
 
     @Input()
-    markersTempRef: TemplateRef<any>;
+    zoomControl: boolean;
+
+    @Input()
+    gestureHandling: 'cooperative' | 'greedy' | 'none' | 'auto' = 'auto';
+
+    @Input()
+    center: { lat: number, lng: number };
+
+    @Input()
+    disableDoubleClickZoom: boolean;
+
+    @Input()
+    fullScreenControl: boolean;
+
+    @Input()
+    heading: number;
+
+    @Input()
+    keyboardShortcuts: boolean;
+
+    @Input()
+    maxZoom: number;
+
+    @Input()
+    minZoom: number;
+
+    @Input()
+    noClear: boolean;
 
     private _mapConfig: google.maps.MapOptions;
 
@@ -62,29 +95,39 @@ export class EzMap implements OnInit {
         center: { lat: 120.9842, lng: 14.5995 },
     }
 
-    constructor(private _gmap: GoogleMaps) {}
+    constructor(
+      private _gmap: GoogleMaps,
+      private _mapManager: MapManager
+    ) {}
 
     ngOnInit() {
         this._buildConfig();
-        this._gmap.createMap(this._mapEl, this._mapConfig).subscribe((map) => {
-            this._mapInstance = map;
-            this.mapReady.next(this._mapInstance);
-            this._bindMapEvents();
-        });
+        this._gmap.createMap(this._mapEl, this._mapConfig)
+          .pipe(take(1))
+          .subscribe((map) => {
+              this._mapInstance = map;
+              this.mapReady.next(this._mapInstance);
+              this._mapManager.mapInstanceReady.next(true);
+              this._bindMapEvents();
+          });
     }
 
     private _bindMapEvents() {
-        this._mapInstance.addListener('bounds_changed', () => {
-            this.boundsChanged.next(this._mapInstance.getBounds());
-        });
+      this._mapInstance.addListener('bounds_changed', () => {
+          this.boundsChanged.next(this._mapInstance.getBounds());
+      });
 
-        this._mapInstance.addListener('center_changed', () => {
-            this.centerChanged.next(this._mapInstance.getCenter());
-        });
+      this._mapInstance.addListener('center_changed', () => {
+          this.centerChanged.next(this._mapInstance.getCenter());
+      });
 
-        this._mapInstance.addListener('zoom_changed', () => {
-            this.zoomChanged.next(this._mapInstance.getZoom());
-        });
+      this._mapInstance.addListener('zoom_changed', () => {
+          this.zoomChanged.next(this._mapInstance.getZoom());
+      });
+
+      this._mapInstance.addListener('click', () => {
+          this._mapManager.mapClicked.next();
+      });
     }
 
     getMapInstance() {
@@ -96,7 +139,15 @@ export class EzMap implements OnInit {
             ...this._defaultConfig,
             ...{
                 center: { lat: this.latitude, lng: this.longitude },
-                zoom: this.zoom
+                zoom: this.zoom,
+                minZoom: this.minZoom ? this.minZoom : 0,
+                maxZoom: this.maxZoom ? this.maxZoom : 0,
+                gestureHandling: this.gestureHandling ? this.gestureHandling : 'auto',
+                disableDoubleClickZoom: this.disableDoubleClickZoom ? this.disableDoubleClickZoom : false,
+                fullscreenControl: this.fullScreenControl ? this.fullScreenControl : false,
+                heading: this.heading ? this.heading : null,
+                noClear: this.noClear ? this.noClear : false
+
             }
         }
     }

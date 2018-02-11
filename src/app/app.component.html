@@ -5,6 +5,7 @@
     [zoom]="12"
     (mapReady)="onMapReady($event)"
     (centerChanged)="onCenter($event)"
+    [gestureHandling]="'greedy'"
     #map
     >
     <ez-marker
@@ -17,20 +18,14 @@
         *ngFor="let marker of (markers$ | async)"
         [latitude]="marker.geometry.location.lat()"
         [longitude]="marker.geometry.location.lng()"
-        [animation]="'DROP'"></ez-marker>
+        [animation]="'DROP'">
+
+        <ez-info-window>
+          <div #infoWindow>
+            <h1> {{ marker.name }} </h1>
+          </div>
+        </ez-info-window>
+
+    </ez-marker>
 
 </ez-map>
-<!--
-<div *ngFor="let obj of (names$ | async)">
-{{ obj.name }}
-</div> -->
-
-<!-- <div *ngFor="let marker of (markers$ | async)">
-  {{ marker.id }}
-</div> -->
-
-<!-- <div  *ngFor="let marker of (markers$ | async)" >{{marker.geometry.location.lat()}}</div> -->
-
-    <!-- (zoomChanged)="onZoom($event)"
-    (boundsChanged)="onBounds($event)"
-    (centerChanged)="onCenter($event)" -->

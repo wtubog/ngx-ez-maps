@@ -1,3 +1,4 @@
+import { EzInfoWindow } from './directives/ez-info-window.component';
 import { EzMarker } from './directives/ez-marker.component';
 import { LocationService } from './libs/location.service';
 import { GoogleMaps } from './libs/google-maps';
@@ -8,14 +9,13 @@ import { NgModule, ModuleWithProviders, APP_INITIALIZER } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 export function libInit(as: AppInitService){
-    return function() {
-        as.initApp();
-    }
+    return () => as.initApp();
 }
 
 const reExports = [
     EzMap,
-    EzMarker
+    EzMarker,
+    EzInfoWindow
 ]
 
 // @dynamic

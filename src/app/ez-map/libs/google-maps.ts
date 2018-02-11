@@ -16,7 +16,7 @@ export class GoogleMaps {
     }
 
     createMarker(config: google.maps.MarkerOptions) {
-        return this._as.isGooglemapsReady.pipe(
-            map(() => new google.maps.Marker(config)));
+        return this._as.isGooglemapsReady
+        .pipe(map(() => new google.maps.Marker(config)));
     }
 }
