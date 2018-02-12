@@ -10,7 +10,7 @@
     "e2e": "ng e2e",
     "build": "ng-packagr -p src/ngx-ez-maps/package.json",
     "travis-deploy-once": "travis-deploy-once",
-    "semantic-release": "semantic-release"
+    "semantic-release": "cd dist/ngx-ez-maps/ && semantic-release"
   },
   "private": true,
   "peerDependencies": {
