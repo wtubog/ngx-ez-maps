@@ -24,15 +24,18 @@ export class EzMarker implements OnInit, OnDestroy {
     @Input()
     animation: string;
 
+    @Input()
+    draggable: boolean = false;
+
     private _markerConfig: google.maps.MarkerOptions;
 
     private _markerInstance: google.maps.Marker;
 
     private _markerId: number;
-    
+
     /**
      * Fires when a marker is clicked
-     * 
+     *
      * Public use marker clicked event
      */
     @Output()
@@ -70,7 +73,8 @@ export class EzMarker implements OnInit, OnDestroy {
                 lat: this.latitude,
                 lng: this.longitude
             },
-            animation: animation
+            animation: animation,
+            draggable: this.draggable
         }
     }
 
@@ -82,7 +86,7 @@ export class EzMarker implements OnInit, OnDestroy {
       this._markerInstance.addListener('click', () => {
         // For internal marker clicked event
         this._mapManager.markerClicked.next(this._markerId);
-        // For public marker clicked event 
+        // For public marker clicked event
         this.markerClicked.next();
       });
     }

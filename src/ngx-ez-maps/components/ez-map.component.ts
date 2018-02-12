@@ -57,7 +57,7 @@ export class EzMap implements OnInit {
     zoom: number;
 
     @Input()
-    zoomControl: boolean;
+    zoomControl: boolean = true;
 
     @Input()
     gestureHandling: 'cooperative' | 'greedy' | 'none' | 'auto' = 'auto';
@@ -93,7 +93,7 @@ export class EzMap implements OnInit {
     mapTypeControlOptions: google.maps.MapTypeControlOptions;
 
     @Input()
-    streetViewControl: boolean;
+    streetViewControl: boolean = true;
 
     private _mapConfig: google.maps.MapOptions;
 
@@ -142,6 +142,7 @@ export class EzMap implements OnInit {
     }
 
     private _buildConfig() {
+      console.log(this.streetViewControl);
         this._mapConfig = {
             ...this._defaultConfig,
             ...{
@@ -154,9 +155,9 @@ export class EzMap implements OnInit {
                 fullscreenControl: this.fullScreenControl ? this.fullScreenControl : false,
                 heading: this.heading ? this.heading : null,
                 noClear: this.noClear ? this.noClear : false,
-                mapTypeControl: this.mapTypeControl ? this.mapTypeControl : false,
-                streetViewControl: this.streetViewControl ? this.streetViewControl: true,
-                zoomControl: this.zoomControl ? this.zoomControl : true
+                mapTypeControl: this.mapTypeControl,
+                streetViewControl: this.streetViewControl,
+                zoomControl: this.zoomControl
 
             }
         }
