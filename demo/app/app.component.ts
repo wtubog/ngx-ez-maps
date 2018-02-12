@@ -1,6 +1,6 @@
-import { EzMap } from './ez-map/directives/ez-map.component';
-import { PlacesService } from './ez-map/libs/places.service';
-import { LocationService } from './ez-map/libs/location.service';
+import { EzMap } from '../../src/ngx-ez-maps/directives/ez-map.component';
+import { PlacesService } from '../../src/ngx-ez-maps/libs/places.service';
+import { LocationService } from '../../src/ngx-ez-maps/libs/location.service';
 import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 
