@@ -63,12 +63,14 @@ export class EzMarker implements OnInit, OnDestroy {
     }
 
     private _buildConfig() {
+        const animation = this.animation ? google.maps.Animation[this.animation] : "" ;
         this._markerConfig = {
             map: this._mapManager.mapInstance,
             position: {
                 lat: this.latitude,
                 lng: this.longitude
-            }
+            },
+            animation: animation
         }
     }
 
