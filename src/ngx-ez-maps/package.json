@@ -11,5 +11,9 @@
       "entryFile": "public_api.ts"
     },
     "dest": "../../dist/ngx-ez-maps"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wtubog/ngx-ez-maps.git"
   }
 }

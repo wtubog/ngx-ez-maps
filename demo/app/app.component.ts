@@ -25,7 +25,7 @@ export class AppComponent implements OnInit {
     private cdr: ChangeDetectorRef
   ) {}
 
-  private _map: EzMap;
+  private _map: any;
 
   pos$: Observable<google.maps.LatLng>;
   curPos: any;
