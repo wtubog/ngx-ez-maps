@@ -4,7 +4,7 @@ import { EzInfoWindow } from './ez-info-window.component';
 import { map, switchMap, filter, take } from 'rxjs/operators';
 import { GoogleMaps } from './../libs/google-maps';
 import { EzMap } from './ez-map.component';
-import { Component, Directive, OnInit, Host, Input, OnDestroy, ChangeDetectionStrategy, ViewChild, ContentChild, Output, ChangeDetectorRef } from "@angular/core";
+import { Component, Directive, OnInit, Host, Input, OnDestroy, ChangeDetectionStrategy, ViewChild, ContentChild, Output, ChangeDetectorRef, EventEmitter } from "@angular/core";
 
 import { } from '@types/google-maps';
 
@@ -24,21 +24,23 @@ export class EzMarker implements OnInit, OnDestroy {
     @Input()
     animation: string;
 
-    @Output()
-    markerClicked = new Subject();
-
-    @ContentChild(EzInfoWindow)
-    private _infoWin: EzInfoWindow;
-
     private _markerConfig: google.maps.MarkerOptions;
 
     private _markerInstance: google.maps.Marker;
 
+    private _markerId: number;
+    
+    /**
+     * Fires when a marker is clicked
+     * 
+     * Public use marker clicked event
+     */
+    @Output()
+    markerClicked = new EventEmitter<void>();
+
     constructor(
-        @Host() private _map: EzMap,
         private _gm: GoogleMaps,
-        private _mapManager: MapManager,
-        private _cdRef: ChangeDetectorRef
+        private _mapManager: MapManager
     ) {}
 
     ngOnInit() {
@@ -52,18 +54,17 @@ export class EzMarker implements OnInit, OnDestroy {
               return this._gm.createMarker(this._markerConfig);
             }))
           .subscribe((marker) => {
-              console.log("Marker created!");
+              this._markerId = this._mapManager.markers.length;
               this._markerInstance = marker;
+              this._mapManager.markers.push(this._markerInstance);
+              console.log(this._markerId);
               this._bindMarkerEvents();
           });
     }
 
     private _buildConfig() {
-        // const animation = this.animation == 'DROP' ? google.maps.Animation.DROP : google.maps.Animation.BOUNCE
-        console.log('Building Marker config...');
-        console.log(this._map.getMapInstance());
         this._markerConfig = {
-            map: this._map.getMapInstance(),
+            map: this._mapManager.mapInstance,
             position: {
                 lat: this.latitude,
                 lng: this.longitude
@@ -77,22 +78,15 @@ export class EzMarker implements OnInit, OnDestroy {
 
     private _bindMarkerEvents() {
       this._markerInstance.addListener('click', () => {
-        this._mapManager.markerClicked.next();
-        if(this._infoWin){
-          this._infoWin.open(this._map.getMapInstance(), this._markerInstance);
-        }
+        // For internal marker clicked event
+        this._mapManager.markerClicked.next(this._markerId);
+        // For public marker clicked event 
+        this.markerClicked.next();
       });
     }
 
-    ngAfterContentInit(){
-
+    get markerId(){
+        return this._markerId;
     }
 
-    get map() {
-      return this._map.getMapInstance();
-    }
-
-    get marker(){
-      return this._markerInstance;
-    }
 }

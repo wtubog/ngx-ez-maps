@@ -35,8 +35,6 @@ export class EzMap implements OnInit {
     @ViewChild('map')
     private _mapEl: ElementRef;
 
-    private _mapInstance: google.maps.Map;
-
     @Output()
     mapReady = new EventEmitter<google.maps.Map>();
 
@@ -105,33 +103,33 @@ export class EzMap implements OnInit {
         this._gmap.createMap(this._mapEl, this._mapConfig)
           .pipe(take(1))
           .subscribe((map) => {
-              this._mapInstance = map;
-              this.mapReady.next(this._mapInstance);
+              this._mapManager.mapInstance = map;
+              this.mapReady.next(this._mapManager.mapInstance);
               this._mapManager.mapInstanceReady.next(true);
               this._bindMapEvents();
           });
     }
 
     private _bindMapEvents() {
-      this._mapInstance.addListener('bounds_changed', () => {
-          this.boundsChanged.next(this._mapInstance.getBounds());
+      this._mapManager.mapInstance.addListener('bounds_changed', () => {
+          this.boundsChanged.next(this._mapManager.mapInstance.getBounds());
       });
 
-      this._mapInstance.addListener('center_changed', () => {
-          this.centerChanged.next(this._mapInstance.getCenter());
+      this._mapManager.mapInstance.addListener('center_changed', () => {
+          this.centerChanged.next(this._mapManager.mapInstance.getCenter());
       });
 
-      this._mapInstance.addListener('zoom_changed', () => {
-          this.zoomChanged.next(this._mapInstance.getZoom());
+      this._mapManager.mapInstance.addListener('zoom_changed', () => {
+          this.zoomChanged.next(this._mapManager.mapInstance.getZoom());
       });
 
-      this._mapInstance.addListener('click', () => {
+      this._mapManager.mapInstance.addListener('click', () => {
           this._mapManager.mapClicked.next();
       });
     }
 
     getMapInstance() {
-        return this._mapInstance;
+        return this._mapManager.mapInstance;
     }
 
     private _buildConfig() {

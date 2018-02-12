@@ -4,7 +4,6 @@
     [longitude]="pos.coords.longitude"
     [zoom]="12"
     (mapReady)="onMapReady($event)"
-    (centerChanged)="onCenter($event)"
     [gestureHandling]="'greedy'"
     #map
     >
@@ -12,6 +11,17 @@
         [longitude]="pos.coords.longitude"
         [latitude]="pos.coords.latitude"
         [animation]="'DROP'">
+        <ez-info-window
+            [isOpen]="true"
+            [closeOnMapClicked]="false"
+            [closeWhenOthersOpened]="false">
+            
+            <div #infoWindow>
+                You are here!
+            </div>
+
+        </ez-info-window>
+
     </ez-marker>
 
     <ez-marker
