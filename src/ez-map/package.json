@@ -1,0 +1,17 @@
+{
+    "$schema": "../../node_modules/ng-packagr/package.schema.json",
+    "name": "ngx-ez-maps",
+    "version": "0.0.0",
+    "license": "MIT",
+    "private": true,
+    "peerDependencies": {
+      "@angular/common": "^5.0.0",
+      "@angular/core": "^5.0.0"
+    },
+    "ngPackage": {
+      "lib": {
+        "entryFile": "public_api.ts"
+      },
+      "dest": "../../dist/ngx-ez-maps"
+    }
+  }
