@@ -86,6 +86,15 @@ export class EzMap implements OnInit {
     @Input()
     noClear: boolean;
 
+    @Input()
+    mapTypeControl: boolean = false;
+
+    @Input()
+    mapTypeControlOptions: google.maps.MapTypeControlOptions;
+
+    @Input()
+    streetViewControl: boolean;
+
     private _mapConfig: google.maps.MapOptions;
 
     private _defaultConfig: google.maps.MapOptions = {
@@ -144,7 +153,10 @@ export class EzMap implements OnInit {
                 disableDoubleClickZoom: this.disableDoubleClickZoom ? this.disableDoubleClickZoom : false,
                 fullscreenControl: this.fullScreenControl ? this.fullScreenControl : false,
                 heading: this.heading ? this.heading : null,
-                noClear: this.noClear ? this.noClear : false
+                noClear: this.noClear ? this.noClear : false,
+                mapTypeControl: this.mapTypeControl ? this.mapTypeControl : false,
+                streetViewControl: this.streetViewControl ? this.streetViewControl: true,
+                zoomControl: this.zoomControl ? this.zoomControl : true
 
             }
         }
