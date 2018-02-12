@@ -1,6 +1,5 @@
 import { switchMap } from 'rxjs/operators';
 import { AppInitService } from './../app-init.service';
-import { EzMap } from './../directives/ez-map.component';
 import { Injectable, NgZone, Inject } from "@angular/core";
 import { Observable } from 'rxjs/Observable';
 

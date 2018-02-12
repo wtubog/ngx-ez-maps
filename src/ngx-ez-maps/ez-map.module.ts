@@ -1,8 +1,8 @@
-import { EzInfoWindow } from './directives/ez-info-window.component';
-import { EzMarker } from './directives/ez-marker.component';
+import { EzInfoWindow } from './components/ez-info-window.component';
+import { EzMarker } from './components/ez-marker.component';
 import { LocationService } from './libs/location.service';
 import { GoogleMaps } from './libs/google-maps';
-import { EzMap } from './directives/ez-map.component';
+import { EzMap } from './components/ez-map.component';
 import { AppInitService } from './app-init.service';
 import { AppConfig, EZ_MAP_CONFIG } from './models/app-config.model';
 import { NgModule, ModuleWithProviders, APP_INITIALIZER } from '@angular/core';

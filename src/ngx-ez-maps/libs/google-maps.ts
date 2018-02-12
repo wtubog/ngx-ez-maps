@@ -1,4 +1,3 @@
-import { EzMap } from './../directives/ez-map.component';
 import { AppInitService } from './../app-init.service';
 import { Injectable, ElementRef } from "@angular/core";
 import { take, map } from 'rxjs/operators';
