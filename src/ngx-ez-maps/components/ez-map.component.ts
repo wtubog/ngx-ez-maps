@@ -1,3 +1,4 @@
+import { Output } from '@angular/core';
 import { take } from 'rxjs/operators';
 import { MapManager } from './../map-manager.service';
 import { GoogleMaps } from './../libs/google-maps';
@@ -35,15 +36,34 @@ export class EzMap implements OnInit {
     @ViewChild('map')
     private _mapEl: ElementRef;
 
+    /**
+     * Emits on Map Click event
+     */
+
+    @Output()
+    mapClicked = new EventEmitter();
+
+    /**
+     * Emits when Map has finished loading
+     */
     @Output()
     mapReady = new EventEmitter<google.maps.Map>();
 
+    /**
+     * Emits when Map bounds changed
+     */
     @Output()
     boundsChanged = new EventEmitter<google.maps.LatLngBounds>();
 
+    /**
+     * Emits when Map center is changed
+     */
     @Output()
     centerChanged = new EventEmitter<google.maps.LatLng>();
 
+    /**
+     * Emits on zoomChanged
+     */
     @Output()
     zoomChanged = new EventEmitter<number>();
 
@@ -57,7 +77,7 @@ export class EzMap implements OnInit {
     zoom: number;
 
     @Input()
-    zoomControl: boolean;
+    zoomControl: boolean = true;
 
     @Input()
     gestureHandling: 'cooperative' | 'greedy' | 'none' | 'auto' = 'auto';
@@ -85,6 +105,15 @@ export class EzMap implements OnInit {
 
     @Input()
     noClear: boolean;
+
+    @Input()
+    mapTypeControl: boolean = false;
+
+    @Input()
+    mapTypeControlOptions: google.maps.MapTypeControlOptions;
+
+    @Input()
+    streetViewControl: boolean = true;
 
     private _mapConfig: google.maps.MapOptions;
 
@@ -124,15 +153,24 @@ export class EzMap implements OnInit {
       });
 
       this._mapManager.mapInstance.addListener('click', () => {
-          this._mapManager.mapClicked.next();
+        //Internal Click Event  
+        this._mapManager.mapClicked.next();
+
+        //Public marker clicked event
+        this.mapClicked.next();
       });
     }
+
+    /**
+     * Returns the GoogleMaps Instance
+     */
 
     getMapInstance() {
         return this._mapManager.mapInstance;
     }
 
     private _buildConfig() {
+      console.log(this.streetViewControl);
         this._mapConfig = {
             ...this._defaultConfig,
             ...{
@@ -144,18 +182,13 @@ export class EzMap implements OnInit {
                 disableDoubleClickZoom: this.disableDoubleClickZoom ? this.disableDoubleClickZoom : false,
                 fullscreenControl: this.fullScreenControl ? this.fullScreenControl : false,
                 heading: this.heading ? this.heading : null,
-                noClear: this.noClear ? this.noClear : false
+                noClear: this.noClear ? this.noClear : false,
+                mapTypeControl: this.mapTypeControl,
+                streetViewControl: this.streetViewControl,
+                zoomControl: this.zoomControl
 
             }
         }
-    }
-
-    ngDoCheck() {
-        console.log("map checking...")
-    }
-
-    ngOnChanges(changes: SimpleChange) {
-      console.log(changes);
     }
 
 }

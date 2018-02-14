@@ -5,8 +5,10 @@
     [zoom]="12"
     (mapReady)="onMapReady($event)"
     [gestureHandling]="'greedy'"
-    #map
-    >
+    [streetViewControl]="false"
+    [zoomControl]="false"
+    (mapClicked)="onMapClicked()"
+    #map>
     <ez-marker
         [longitude]="pos.coords.longitude"
         [latitude]="pos.coords.latitude">
@@ -14,7 +16,7 @@
             [isOpen]="true"
             [closeOnMapClicked]="false"
             [closeWhenOthersOpened]="false">
-            
+
             <div #infoWindow>
                 You are here!
             </div>
@@ -27,9 +29,11 @@
         *ngFor="let marker of (markers$ | async)"
         [latitude]="marker.geometry.location.lat()"
         [longitude]="marker.geometry.location.lng()"
-        [animation]="'DROP'">
+        [animation]="'DROP'"
+        (markerClicked)="onMarkerClicked($event)">
 
-        <ez-info-window>
+        <ez-info-window
+            (onClose)="onInfoWindowClose()">
           <div #infoWindow>
             <h1> {{ marker.name }} </h1>
           </div>
