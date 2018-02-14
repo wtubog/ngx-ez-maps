@@ -1,3 +1,4 @@
+import { EzMarker } from './../../src/ngx-ez-maps/components/ez-marker.component';
 import { EzMap } from '../../src/ngx-ez-maps/components/ez-map.component';
 import { PlacesService } from '../../src/ngx-ez-maps/libs/places.service';
 import { LocationService } from '../../src/ngx-ez-maps/libs/location.service';
@@ -26,6 +27,7 @@ export class AppComponent implements OnInit {
   ) {}
 
   private _map: any;
+  private _activeMarker: EzMarker
 
   pos$: Observable<Position>;
   curPos: any;
@@ -88,5 +90,21 @@ export class AppComponent implements OnInit {
       radius: 5000,
       location: this.curPos
     }).pipe(tap((data) => console.log(data)));
+  }
+
+  onMarkerClicked(marker: EzMarker) {
+    this._activeMarker = marker;
+    marker.setAnimation('BOUNCE')
+    console.log(this);
+  }
+
+  onInfoWindowClose() {
+    this._activeMarker.setAnimation(null);
+  }
+
+  onMapClicked() {
+    this._activeMarker.setAnimation(null);
+
+    this._activeMarker = null;
   }
 }

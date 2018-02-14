@@ -1,3 +1,4 @@
+import { EventEmitter, Output } from '@angular/core';
 import { OnDestroy } from '@angular/core';
 import { MapManager } from './../map-manager.service';
 import { EzMarker } from './ez-marker.component';
@@ -19,15 +20,35 @@ export class EzInfoWindow implements OnInit, OnDestroy {
   private _infowWindowTemplate: ElementRef;
 
   private _infoWindow: google.maps.InfoWindow;
+  private _isOpen = false;
+
+  /**
+   * Input to change if you want the info window to be initially opened when instantiated
+   */
 
   @Input()
   isOpen = false;
 
+  /**
+   * Closes the InfoWindow when user clicks on the map
+   */
+
   @Input()
   closeOnMapClicked = true;
 
+  /**
+   * Closes the Info window if other Marker's InfoWindow is open
+   */
+
   @Input()
   closeWhenOthersOpened = true;
+
+  /**
+   * Emits when the info window is closed
+   */
+
+  @Output()
+  onClose = new EventEmitter();
 
   private _mapClickListener$: Subscription;
   private _markerClickListener$: Subscription;
@@ -42,11 +63,11 @@ export class EzInfoWindow implements OnInit, OnDestroy {
     this._as.isGooglemapsReady
       .pipe(take(1))
       .subscribe(() => {
-        console.log(this.isOpen);
           this._infoWindow = new google.maps.InfoWindow({
             content: this._infowWindowTemplate.nativeElement
           });
           this.isOpen && this.open();
+          this._bindInfoWindowEvents();
       });
 
     this._mapClickListener$ = this._mapManager.mapClicked.asObservable()
@@ -62,14 +83,25 @@ export class EzInfoWindow implements OnInit, OnDestroy {
     });
   }
 
+  /**
+   * Opens the InfoWindow
+   */
+
   open() {
+    this._isOpen = true;
     this._infoWindow.open(
         this._mapManager.mapInstance, 
         this._mapManager.markers[this._marker.markerId]
     );
   }
 
+  /**
+   * Closes the InfoWindow
+   */
+
   close() {
+    this._isOpen && this.onClose.next();
+    this._isOpen = false;
     this._infoWindow.close();
   }
 
@@ -77,6 +109,12 @@ export class EzInfoWindow implements OnInit, OnDestroy {
     this._mapClickListener$.unsubscribe();
     this._markerClickListener$.unsubscribe();
     this._infoWindow = null;
+  }
+
+  private _bindInfoWindowEvents() {
+    this._infoWindow.addListener('closeclick', () => {
+      this.close()
+    })
   }
 
 }
