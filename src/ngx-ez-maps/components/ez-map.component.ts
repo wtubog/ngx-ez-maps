@@ -1,4 +1,3 @@
-import { Output } from '@angular/core';
 import { take } from 'rxjs/operators';
 import { MapManager } from './../map-manager.service';
 import { GoogleMaps } from './../libs/google-maps';
