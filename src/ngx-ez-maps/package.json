@@ -30,5 +30,12 @@
   "release": {
     "branch": "master"
   },
-  "homepage": "https://github.com/wtubog/ngx-ez-maps"
+  "homepage": "https://github.com/wtubog/ngx-ez-maps",
+  "keywords": [
+    "rxjs",
+    "googlemaps",
+    "angular",
+    "typescript",
+    "ngx"
+  ]
 }
