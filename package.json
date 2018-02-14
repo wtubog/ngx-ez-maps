@@ -61,5 +61,6 @@
   },
   "release": {
     "branch": "master"
-  }
+  },
+  "homepage": "https://github.com/wtubog/ngx-ez-maps"
 }

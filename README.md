@@ -55,8 +55,8 @@ export class AppComponent implements OnInit {
     selectedMarker: EzMarker;
 
     pos = {
-        longitude: 121.0392323,
-        latitude: 14.6383626
+        longitude: 121.1924108,
+        latitude: 14.5964957
     }
 
     onMapReady(map: EzMap) {
@@ -119,8 +119,8 @@ EzMaps is shipped with helper libraries like `LocationService`
 `LocationService` encapsulates `navigator.geolocation`'s methods with RxJS (because we all love observables) 
 
 ### Methods
-..* getCurrentLocation
-..* watchPosition
+- getCurrentLocation
+- watchPosition
 
 ### Usage
 
@@ -162,9 +162,9 @@ export class AppComponent {
 
 ### Methods
 
-..* nearbySearch
-..* textSearch
-..* getDetails
+- nearbySearch
+- textSearch
+- getDetails
 
 For more information about the parameters for these methods, check out the awesome GoogleMaps [docs](https://developers.google.com/maps/documentation/javascript/places)
 
@@ -196,8 +196,8 @@ Use its methods within `onMapReady` only because each method within the `PlacesS
 export class AppComponent {
 
     pos = {
-        lng: 121.0392323,
-        lat: 14.6383626
+        lng: 121.1924108,
+        lat: 14.5964957
     };
 
     constructor(private _placesService: PlacesService) {}
