@@ -57,7 +57,6 @@ export class EzMarker implements OnInit, OnDestroy {
               this._markerId = this._mapManager.markers.length;
               this._markerInstance = marker;
               this._mapManager.markers.push(this._markerInstance);
-              console.log(this._markerId);
               this._bindMarkerEvents();
           });
     }

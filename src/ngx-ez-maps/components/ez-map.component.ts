@@ -150,12 +150,4 @@ export class EzMap implements OnInit {
         }
     }
 
-    ngDoCheck() {
-        console.error("map checking...")
-    }
-
-    ngOnChanges(changes: SimpleChange) {
-      console.log(changes);
-    }
-
 }
