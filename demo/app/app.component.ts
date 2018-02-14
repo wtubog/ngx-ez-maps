@@ -27,7 +27,7 @@ export class AppComponent implements OnInit {
 
   private _map: any;
 
-  pos$: Observable<google.maps.LatLng>;
+  pos$: Observable<Position>;
   curPos: any;
 
   markers$: Observable<google.maps.places.PlaceResult[]>;
@@ -36,13 +36,23 @@ export class AppComponent implements OnInit {
     this.pos$ = this._ls.getCurrentLocation()
       .pipe(
         take(1),
-        tap((data: any) => {
+        tap((data) => {
           this.curPos = {
             lat: data.coords.latitude,
             lng: data.coords.longitude
           }
         })
       );
+    this._ls.watchPosition().subscribe(
+      (data) => console.log(data),
+      (err) => console.log(err),
+      () => console.log("completed!")
+    );
+
+    setTimeout(() => {
+      console.log('clearing watch...')
+      this._ls.clearWatch()
+    }, 20000)
   }
 
   onBounds(data) {
