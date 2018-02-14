@@ -1,3 +1,4 @@
+import { Output } from '@angular/core';
 import { take } from 'rxjs/operators';
 import { MapManager } from './../map-manager.service';
 import { GoogleMaps } from './../libs/google-maps';
@@ -35,15 +36,34 @@ export class EzMap implements OnInit {
     @ViewChild('map')
     private _mapEl: ElementRef;
 
+    /**
+     * Emits on Map Click event
+     */
+
+    @Output()
+    mapClicked = new EventEmitter();
+
+    /**
+     * Emits when Map has finished loading
+     */
     @Output()
     mapReady = new EventEmitter<google.maps.Map>();
 
+    /**
+     * Emits when Map bounds changed
+     */
     @Output()
     boundsChanged = new EventEmitter<google.maps.LatLngBounds>();
 
+    /**
+     * Emits when Map center is changed
+     */
     @Output()
     centerChanged = new EventEmitter<google.maps.LatLng>();
 
+    /**
+     * Emits on zoomChanged
+     */
     @Output()
     zoomChanged = new EventEmitter<number>();
 
@@ -133,9 +153,17 @@ export class EzMap implements OnInit {
       });
 
       this._mapManager.mapInstance.addListener('click', () => {
-          this._mapManager.mapClicked.next();
+        //Internal Click Event  
+        this._mapManager.mapClicked.next();
+
+        //Public marker clicked event
+        this.mapClicked.next();
       });
     }
+
+    /**
+     * Returns the GoogleMaps Instance
+     */
 
     getMapInstance() {
         return this._mapManager.mapInstance;
@@ -161,14 +189,6 @@ export class EzMap implements OnInit {
 
             }
         }
-    }
-
-    ngDoCheck() {
-        console.log("map checking...")
-    }
-
-    ngOnChanges(changes: SimpleChange) {
-      console.log(changes);
     }
 
 }
