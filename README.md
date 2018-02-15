@@ -8,12 +8,17 @@ A relatively easy to use google maps
 
 ```bash
 $ npm install ngx-ez-maps --save
-
 ```
 
 ## Work in progress
 
-This library is under heavy development and has only basic GoogleMap's functionality, feel free to contribute :)
+This library is under heavy development and has only basic GoogleMap's functionality such as:
+
+- Map display
+- Markers
+- Info windows
+
+More features coming soon! feel free to contribute :)
 
 ### To do list
 
@@ -111,7 +116,6 @@ export class AppComponent implements OnInit {
     </ez-marker>
 
 </ez-map>
-
 ```
 
 ## LocationService
@@ -155,7 +159,6 @@ export class AppComponent {
             })
     }
 }
-
 ```
 
 ## PlacesService
@@ -182,10 +185,9 @@ Start by providing the service:
     providers: [PlacesService]
 })
 export class CoreModule {}
-
 ```
 
-Use its methods within `onMapReady` only because each method within the `PlacesService` would need `map` instance
+Use its methods within `onMapReady` or keep the `map` instance returned when the event is fired because each method within the `PlacesService` would need `map` instance
 
 ```typescript
 
@@ -216,5 +218,4 @@ export class AppComponent {
 
     }
 }
-
 ```
