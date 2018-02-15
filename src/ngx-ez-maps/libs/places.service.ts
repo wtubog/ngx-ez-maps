@@ -13,6 +13,14 @@ export class PlacesService {
     private _as: AppInitService
   ) {}
 
+    /**
+     * Encapsulates GoogleMaps Places Library's nearBySearch method.
+     * @param map - a GoogleMap's map object
+     * @param request - PlaceSearchRequest object
+     * @return PlaceResult object
+     * For reference: https://developers.google.com/maps/documentation/javascript/places
+     */
+
     nearbySearch(map: google.maps.Map, request: google.maps.places.PlaceSearchRequest): Observable<google.maps.places.PlaceResult[]> {
         return this._as.isGooglemapsReady.pipe(
             switchMap(() => {
@@ -30,6 +38,14 @@ export class PlacesService {
         )
     }
 
+    /**
+     * Encapsulates GoogleMaps Places Library's textSearch method.
+     * @param map - a GoogleMap's map object
+     * @param request - TextSearchRequest object
+     * @return PlaceResult object
+     * For reference: https://developers.google.com/maps/documentation/javascript/places
+     */
+
     textSearch(map: google.maps.Map, request: google.maps.places.TextSearchRequest): Observable<google.maps.places.PlaceResult[]>{
         return this._as.isGooglemapsReady.pipe(
             switchMap(() => {
@@ -45,6 +61,14 @@ export class PlacesService {
             })
         )
     }
+
+    /**
+     * Encapsulates GoogleMaps Places Library's textSeargetDetailsch method.
+     * @param map - a GoogleMap's map object
+     * @param request - PlaceDetailsRequest object
+     * @return PlaceResult object
+     * For reference: https://developers.google.com/maps/documentation/javascript/places
+     */
 
     getDetails(map: google.maps.Map, request: google.maps.places.PlaceDetailsRequest): Observable<google.maps.places.PlaceResult> {
         return this._as.isGooglemapsReady.pipe(
