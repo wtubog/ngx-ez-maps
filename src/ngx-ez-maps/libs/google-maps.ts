@@ -12,6 +12,11 @@ export class GoogleMaps {
         private _zone: NgZone
     ) {}
 
+    /**
+     * Checks wether the GoogleMaps library is ready via an Observable, then instantiates a map object
+     * For reference: https://developers.google.com/maps/documentation/javascript/reference/3.exp/#Map
+     */
+
     createMap(elem: ElementRef, conf: google.maps.MapOptions): Observable<google.maps.Map>{
         return this._as.isGooglemapsReady
         .pipe(
@@ -19,6 +24,11 @@ export class GoogleMaps {
                 this._zone.runOutsideAngular(() => new google.maps.Map(elem.nativeElement, conf)))
         );
     }
+
+    /**
+     * Checks wether the GoogleMaps library is ready via an Observable, then instantiates a marker object
+     * For reference: https://developers.google.com/maps/documentation/javascript/reference/3.exp/#Marker
+     */
 
     createMarker(config: google.maps.MarkerOptions) {
         
