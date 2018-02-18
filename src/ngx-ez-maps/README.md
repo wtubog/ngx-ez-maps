@@ -15,8 +15,8 @@ This library is under heavy development and has only basic GoogleMap's functiona
 
 ### To do list
 
-..* Testing 
-..* Everything under the [GooleMap Docs](https://developers.google.com/maps/documentation/javascript/)
+- Testing 
+- Everything under the [GooleMap Docs](https://developers.google.com/maps/documentation/javascript/)
 
 ## Basic Usage
 

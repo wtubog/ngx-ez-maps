@@ -16,6 +16,11 @@ export class LocationService {
     private _zone: NgZone
   ){}
 
+    /**
+     * Encapsulates navigator.geolocation.getCurrentPosition method with RxJs 
+     * For reference: https://developer.mozilla.org/en-US/docs/Web/API/Geolocation/getCurrentPosition
+     */
+
     getCurrentLocation(options?: PositionOptions): Observable<Position> {
         return Observable.create((observer) => {
             if('geolocation' in navigator){
@@ -29,6 +34,11 @@ export class LocationService {
             }
         })
     }
+
+    /**
+     * Encapsulates navigator.geolocation.watchPosition method with RxJs 
+     * For reference: https://developer.mozilla.org/en-US/docs/Web/API/Geolocation/watchPosition
+     */
 
     watchPosition(): Observable<Position> {
         if(this._positionId){
@@ -46,6 +56,10 @@ export class LocationService {
             return this._position$;
         }
     }
+
+    /**
+     * Clears the position ID
+     */
     
     clearWatch(){
         if(this._positionId){

@@ -1,22 +1,29 @@
 # RxJS Powered Google Maps for Angular
 
+[![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release)
+
 A relatively easy to use google maps
 
 ## Installation
 
 ```bash
 $ npm install ngx-ez-maps --save
-
 ```
 
 ## Work in progress
 
-This library is under heavy development and has only basic GoogleMap's functionality, feel free to contribute :)
+This library is under heavy development and has only basic GoogleMap's functionality such as:
+
+- Map display
+- Markers
+- Info windows
+
+More features coming soon! feel free to contribute :)
 
 ### To do list
 
-..* Testing 
-..* Everything under the [GooleMap Docs](https://developers.google.com/maps/documentation/javascript/)
+- Testing 
+- Everything under the [GooleMap Docs](https://developers.google.com/maps/documentation/javascript/)
 
 ## Basic Usage
 
@@ -109,7 +116,6 @@ export class AppComponent implements OnInit {
     </ez-marker>
 
 </ez-map>
-
 ```
 
 ## LocationService
@@ -153,7 +159,6 @@ export class AppComponent {
             })
     }
 }
-
 ```
 
 ## PlacesService
@@ -180,10 +185,9 @@ Start by providing the service:
     providers: [PlacesService]
 })
 export class CoreModule {}
-
 ```
 
-Use its methods within `onMapReady` only because each method within the `PlacesService` would need `map` instance
+Use its methods within `onMapReady` or keep the `map` instance returned when the event is fired because each method within the `PlacesService` would need `map` instance
 
 ```typescript
 
@@ -214,5 +218,4 @@ export class AppComponent {
 
     }
 }
-
 ```

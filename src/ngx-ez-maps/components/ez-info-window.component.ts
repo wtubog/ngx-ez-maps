@@ -1,5 +1,4 @@
-import { EventEmitter, Output } from '@angular/core';
-import { OnDestroy } from '@angular/core';
+import { OnDestroy, NgZone, Output, EventEmitter } from '@angular/core';
 import { MapManager } from './../map-manager.service';
 import { EzMarker } from './ez-marker.component';
 import { Host, Input, SkipSelf } from '@angular/core';
@@ -56,22 +55,26 @@ export class EzInfoWindow implements OnInit, OnDestroy {
   constructor(
     private _as: AppInitService,
     private _mapManager: MapManager,
-    @Host() private _marker: EzMarker
+    @Host() private _marker: EzMarker,
+    private _zone: NgZone
   ) {}
 
   ngOnInit() {
     this._as.isGooglemapsReady
       .pipe(take(1))
       .subscribe(() => {
-          this._infoWindow = new google.maps.InfoWindow({
-            content: this._infowWindowTemplate.nativeElement
+        console.log(this.isOpen);
+          this._infoWindow = this._zone.runOutsideAngular(() => {
+            return new google.maps.InfoWindow({
+              content: this._infowWindowTemplate.nativeElement
+            })
           });
           this.isOpen && this.open();
           this._bindInfoWindowEvents();
       });
 
     this._mapClickListener$ = this._mapManager.mapClicked.asObservable()
-      .subscribe(() => 
+      .subscribe(() =>
         this.closeOnMapClicked && this.close());
 
     this._markerClickListener$ = this._mapManager.markerClicked.asObservable()
@@ -90,7 +93,7 @@ export class EzInfoWindow implements OnInit, OnDestroy {
   open() {
     this._isOpen = true;
     this._infoWindow.open(
-        this._mapManager.mapInstance, 
+        this._mapManager.mapInstance,
         this._mapManager.markers[this._marker.markerId]
     );
   }
