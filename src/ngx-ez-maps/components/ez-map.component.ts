@@ -140,7 +140,6 @@ export class EzMap implements OnInit {
     }
 
     private _bindMapEvents() {
-<<<<<<< HEAD
       this._zone.runOutsideAngular(() => {
         this._mapManager.mapInstance.addListener('bounds_changed', () => {
             this.boundsChanged.next(this._mapManager.mapInstance.getBounds());
@@ -158,27 +157,6 @@ export class EzMap implements OnInit {
             this._mapManager.mapClicked.next();
         });
       })
-=======
-      this._mapManager.mapInstance.addListener('bounds_changed', () => {
-          this.boundsChanged.next(this._mapManager.mapInstance.getBounds());
-      });
-
-      this._mapManager.mapInstance.addListener('center_changed', () => {
-          this.centerChanged.next(this._mapManager.mapInstance.getCenter());
-      });
-
-      this._mapManager.mapInstance.addListener('zoom_changed', () => {
-          this.zoomChanged.next(this._mapManager.mapInstance.getZoom());
-      });
-
-      this._mapManager.mapInstance.addListener('click', () => {
-        //Internal Click Event  
-        this._mapManager.mapClicked.next();
-
-        //Public marker clicked event
-        this.mapClicked.next();
-      });
->>>>>>> a3dd96b05cc2c6f7122315fd602ffb053232836a
     }
 
     /**
