@@ -155,6 +155,8 @@ export class EzMap implements OnInit {
 
         this._mapManager.mapInstance.addListener('click', () => {
             this._mapManager.mapClicked.next();
+
+            this.mapClicked.next();
         });
       })
     }
