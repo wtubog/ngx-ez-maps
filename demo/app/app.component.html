@@ -11,16 +11,6 @@
     <ez-marker
         [longitude]="pos.coords.longitude"
         [latitude]="pos.coords.latitude">
-        <ez-info-window
-            [isOpen]="true"
-            [closeOnMapClicked]="false"
-            [closeWhenOthersOpened]="false">
-
-            <div #infoWindow>
-                You are here!
-            </div>
-
-        </ez-info-window>
 
     </ez-marker>
 
@@ -30,11 +20,6 @@
         [longitude]="marker.geometry.location.lng()"
         [animation]="'DROP'">
 
-        <ez-info-window>
-          <div #infoWindow>
-            <h1> {{ marker.name }} </h1>
-          </div>
-        </ez-info-window>
 
     </ez-marker>
 

@@ -2,7 +2,7 @@ import { take } from 'rxjs/operators';
 import { MapManager } from './../map-manager.service';
 import { GoogleMaps } from './../libs/google-maps';
 import { AppInitService } from './../app-init.service';
-import { Component, OnInit, ElementRef, ViewChild, Output, EventEmitter, Input, ChangeDetectionStrategy, TemplateRef } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, Output, EventEmitter, Input, ChangeDetectionStrategy, TemplateRef, NgZone } from '@angular/core';
 
 import { } from '@types/google-maps';
 import { Subject } from 'rxjs/Subject';
@@ -104,7 +104,8 @@ export class EzMap implements OnInit {
 
     constructor(
       private _gmap: GoogleMaps,
-      private _mapManager: MapManager
+      private _mapManager: MapManager,
+      private _zone: NgZone
     ) {}
 
     ngOnInit() {
@@ -120,21 +121,23 @@ export class EzMap implements OnInit {
     }
 
     private _bindMapEvents() {
-      this._mapManager.mapInstance.addListener('bounds_changed', () => {
-          this.boundsChanged.next(this._mapManager.mapInstance.getBounds());
-      });
+      this._zone.runOutsideAngular(() => {
+        this._mapManager.mapInstance.addListener('bounds_changed', () => {
+            this.boundsChanged.next(this._mapManager.mapInstance.getBounds());
+        });
 
-      this._mapManager.mapInstance.addListener('center_changed', () => {
-          this.centerChanged.next(this._mapManager.mapInstance.getCenter());
-      });
+        this._mapManager.mapInstance.addListener('center_changed', () => {
+            this.centerChanged.next(this._mapManager.mapInstance.getCenter());
+        });
 
-      this._mapManager.mapInstance.addListener('zoom_changed', () => {
-          this.zoomChanged.next(this._mapManager.mapInstance.getZoom());
-      });
+        this._mapManager.mapInstance.addListener('zoom_changed', () => {
+            this.zoomChanged.next(this._mapManager.mapInstance.getZoom());
+        });
 
-      this._mapManager.mapInstance.addListener('click', () => {
-          this._mapManager.mapClicked.next();
-      });
+        this._mapManager.mapInstance.addListener('click', () => {
+            this._mapManager.mapClicked.next();
+        });
+      })
     }
 
     getMapInstance() {
