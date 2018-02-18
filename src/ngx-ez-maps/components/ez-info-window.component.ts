@@ -68,16 +68,11 @@ export class EzInfoWindow implements OnInit, OnDestroy {
     this._as.isGooglemapsReady
       .pipe(take(1))
       .subscribe(() => {
-<<<<<<< HEAD
         console.log(this.isOpen);
           this._infoWindow = this._zone.runOutsideAngular(() => {
             return new google.maps.InfoWindow({
               content: this._infowWindowTemplate.nativeElement
             })
-=======
-          this._infoWindow = new google.maps.InfoWindow({
-            content: this._infowWindowTemplate.nativeElement
->>>>>>> a3dd96b05cc2c6f7122315fd602ffb053232836a
           });
           this.isOpen && this.open();
           this._bindInfoWindowEvents();
