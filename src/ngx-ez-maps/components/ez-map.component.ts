@@ -35,15 +35,34 @@ export class EzMap implements OnInit {
     @ViewChild('map')
     private _mapEl: ElementRef;
 
+    /**
+     * Emits on Map Click event
+     */
+
+    @Output()
+    mapClicked = new EventEmitter();
+
+    /**
+     * Emits when Map has finished loading
+     */
     @Output()
     mapReady = new EventEmitter<google.maps.Map>();
 
+    /**
+     * Emits when Map bounds changed
+     */
     @Output()
     boundsChanged = new EventEmitter<google.maps.LatLngBounds>();
 
+    /**
+     * Emits when Map center is changed
+     */
     @Output()
     centerChanged = new EventEmitter<google.maps.LatLng>();
 
+    /**
+     * Emits on zoomChanged
+     */
     @Output()
     zoomChanged = new EventEmitter<number>();
 
@@ -121,6 +140,7 @@ export class EzMap implements OnInit {
     }
 
     private _bindMapEvents() {
+<<<<<<< HEAD
       this._zone.runOutsideAngular(() => {
         this._mapManager.mapInstance.addListener('bounds_changed', () => {
             this.boundsChanged.next(this._mapManager.mapInstance.getBounds());
@@ -138,7 +158,32 @@ export class EzMap implements OnInit {
             this._mapManager.mapClicked.next();
         });
       })
+=======
+      this._mapManager.mapInstance.addListener('bounds_changed', () => {
+          this.boundsChanged.next(this._mapManager.mapInstance.getBounds());
+      });
+
+      this._mapManager.mapInstance.addListener('center_changed', () => {
+          this.centerChanged.next(this._mapManager.mapInstance.getCenter());
+      });
+
+      this._mapManager.mapInstance.addListener('zoom_changed', () => {
+          this.zoomChanged.next(this._mapManager.mapInstance.getZoom());
+      });
+
+      this._mapManager.mapInstance.addListener('click', () => {
+        //Internal Click Event  
+        this._mapManager.mapClicked.next();
+
+        //Public marker clicked event
+        this.mapClicked.next();
+      });
+>>>>>>> a3dd96b05cc2c6f7122315fd602ffb053232836a
     }
+
+    /**
+     * Returns the GoogleMaps Instance
+     */
 
     getMapInstance() {
         return this._mapManager.mapInstance;
@@ -164,14 +209,6 @@ export class EzMap implements OnInit {
 
             }
         }
-    }
-
-    ngDoCheck() {
-        console.log("map checking...")
-    }
-
-    ngOnChanges(changes: SimpleChange) {
-      console.log(changes);
     }
 
 }

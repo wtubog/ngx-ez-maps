@@ -20,11 +20,22 @@
     "semantic-release": "semantic-release",
     "travis-deploy-once": "travis-deploy-once"
   },
+  "dependencies": {
+    "@types/google-maps": "^3.2.0"
+  },
   "devDependencies": {
     "semantic-release": "^12.4.1",
     "travis-deploy-once": "^4.3.4"
   },
   "release": {
     "branch": "master"
-  }
+  },
+  "homepage": "https://github.com/wtubog/ngx-ez-maps",
+  "keywords": [
+    "rxjs",
+    "googlemaps",
+    "angular",
+    "typescript",
+    "ngx"
+  ]
 }

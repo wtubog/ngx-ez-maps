@@ -7,6 +7,7 @@
     [gestureHandling]="'greedy'"
     [streetViewControl]="false"
     [zoomControl]="false"
+    (mapClicked)="onMapClicked()"
     #map>
     <ez-marker
         [longitude]="pos.coords.longitude"
@@ -18,7 +19,8 @@
         *ngFor="let marker of (markers$ | async)"
         [latitude]="marker.geometry.location.lat()"
         [longitude]="marker.geometry.location.lng()"
-        [animation]="'DROP'">
+        [animation]="'DROP'"
+        (markerClicked)="onMarkerClicked($event)">
 
 
     </ez-marker>

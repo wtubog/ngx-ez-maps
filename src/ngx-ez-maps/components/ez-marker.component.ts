@@ -35,11 +35,10 @@ export class EzMarker implements OnInit, OnDestroy {
 
     /**
      * Fires when a marker is clicked
-     *
      * Public use marker clicked event
      */
     @Output()
-    markerClicked = new EventEmitter<void>();
+    markerClicked = new EventEmitter<EzMarker>();
 
     constructor(
         private _gm: GoogleMaps,
@@ -47,6 +46,14 @@ export class EzMarker implements OnInit, OnDestroy {
     ) {}
 
     ngOnInit() {
+        this._initializeMarker();
+    }
+
+    /**
+     * Create / Initialize the Marker instance
+     */
+
+    private _initializeMarker() {
         this._mapManager.mapInstanceReady
           .asObservable()
           .pipe(
@@ -60,10 +67,14 @@ export class EzMarker implements OnInit, OnDestroy {
               this._markerId = this._mapManager.markers.length;
               this._markerInstance = marker;
               this._mapManager.markers.push(this._markerInstance);
-              console.log(this._markerId);
               this._bindMarkerEvents();
           });
     }
+
+    /**
+     * Builds the configuration needed to instantiate the Maker
+     * @return void
+     */
 
     private _buildConfig() {
         const animation = this.animation ? google.maps.Animation[this.animation] : "" ;
@@ -82,17 +93,58 @@ export class EzMarker implements OnInit, OnDestroy {
         this._markerInstance.setMap(null);
     }
 
+    /**
+     * Starts listening on Marker Events
+     */
+
     private _bindMarkerEvents() {
       this._markerInstance.addListener('click', () => {
         // For internal marker clicked event
         this._mapManager.markerClicked.next(this._markerId);
-        // For public marker clicked event
-        this.markerClicked.next();
+        // For public marker clicked event 
+        this.markerClicked.next(this);
       });
     }
 
+    /**
+     * Internal use only
+     */
+
     get markerId(){
         return this._markerId;
+    }
+
+    getAnimation(): google.maps.Animation {
+        return this._markerInstance.getAnimation();
+    }
+
+    /**
+     * Start an animation. Any ongoing animation will be cancelled. 
+     * Currently supported animations are: BOUNCE, DROP. 
+     * Passing in null will cause any animation to stop.
+     */
+
+    setAnimation(animation: 'DROP' | 'BOUNCE' | null): void {
+        const anim = animation ? google.maps.Animation[animation] : null;
+        this._markerInstance.setAnimation(anim);
+    }
+
+    /**
+     * Sets or Updates the position of a Marker on the Map
+     * @param latlang
+     */
+
+    setPosition(latLng: google.maps.LatLngLiteral) {
+        this._markerInstance.setPosition(latLng);
+    }
+
+    /**
+     * Get the position of the Marker
+     * @return LatLng object
+     */
+
+    getPosition(): google.maps.LatLng{
+        return this._markerInstance.getPosition();
     }
 
 }
