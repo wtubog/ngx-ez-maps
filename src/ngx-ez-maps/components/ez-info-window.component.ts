@@ -1,9 +1,4 @@
-<<<<<<< HEAD
 import { OnDestroy, NgZone } from '@angular/core';
-=======
-import { EventEmitter, Output } from '@angular/core';
-import { OnDestroy } from '@angular/core';
->>>>>>> a3dd96b05cc2c6f7122315fd602ffb053232836a
 import { MapManager } from './../map-manager.service';
 import { EzMarker } from './ez-marker.component';
 import { Host, Input, SkipSelf } from '@angular/core';
