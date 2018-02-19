@@ -20,7 +20,8 @@
         [latitude]="marker.geometry.location.lat()"
         [longitude]="marker.geometry.location.lng()"
         [animation]="'DROP'"
-        (markerClicked)="onMarkerClicked($event)">
+        (markerClicked)="onMarkerClicked($event)"
+        [icon]="'/assets/tennis_ball.png'">
 
 
     </ez-marker>

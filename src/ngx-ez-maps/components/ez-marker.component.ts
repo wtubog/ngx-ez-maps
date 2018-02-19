@@ -27,6 +27,9 @@ export class EzMarker implements OnInit, OnDestroy {
     @Input()
     draggable: boolean = false;
 
+    @Input()
+    icon: string = "";
+
     private _markerConfig: google.maps.MarkerOptions;
 
     private _markerInstance: google.maps.Marker;
@@ -87,6 +90,10 @@ export class EzMarker implements OnInit, OnDestroy {
             animation: animation,
             draggable: this.draggable
         }
+
+        if(this.icon != ""){
+          this._markerConfig["icon"] = this.icon;
+        }
     }
 
     ngOnDestroy() {
@@ -101,7 +108,7 @@ export class EzMarker implements OnInit, OnDestroy {
       this._markerInstance.addListener('click', () => {
         // For internal marker clicked event
         this._mapManager.markerClicked.next(this._markerId);
-        // For public marker clicked event 
+        // For public marker clicked event
         this.markerClicked.next(this);
       });
     }
@@ -119,8 +126,8 @@ export class EzMarker implements OnInit, OnDestroy {
     }
 
     /**
-     * Start an animation. Any ongoing animation will be cancelled. 
-     * Currently supported animations are: BOUNCE, DROP. 
+     * Start an animation. Any ongoing animation will be cancelled.
+     * Currently supported animations are: BOUNCE, DROP.
      * Passing in null will cause any animation to stop.
      */
 
