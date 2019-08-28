@@ -1,9 +1,7 @@
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Subject } from 'rxjs/Subject';
-import {} from '@types/google-maps';
 
 export class MapManager {
-
   mapInstance: google.maps.Map;
 
   markers: google.maps.Marker[] = [];
@@ -13,5 +11,4 @@ export class MapManager {
   markerClicked = new Subject<number>();
 
   mapInstanceReady = new BehaviorSubject<boolean>(false);
-
 }

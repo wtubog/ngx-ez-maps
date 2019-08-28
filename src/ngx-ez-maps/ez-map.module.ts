@@ -1,52 +1,45 @@
-import { EzInfoWindow } from './components/ez-info-window.component';
-import { EzMarker } from './components/ez-marker.component';
-import { LocationService } from './libs/location.service';
-import { GoogleMaps } from './libs/google-maps';
-import { EzMap } from './components/ez-map.component';
-import { AppInitService } from './app-init.service';
-import { AppConfig, EZ_MAP_CONFIG } from './models/app-config.model';
-import { NgModule, ModuleWithProviders, APP_INITIALIZER } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { APP_INITIALIZER, ModuleWithProviders, NgModule } from '@angular/core';
+import { AppInitService } from './app-init.service';
+import { EzInfoWindowComponent } from './components/ez-info-window.component';
+import { EzMapComponent } from './components/ez-map.component';
+import { EzMarkerComponent } from './components/ez-marker.component';
+import { GoogleMaps } from './libs/google-maps';
+import { AppConfig, EZ_MAP_CONFIG } from './models/app-config.model';
 
-export function libInit(as: AppInitService){
-    return () => as.initApp();
+export function libInit(as: AppInitService) {
+  return () => as.initApp();
 }
 
 const reExports = [
-    EzMap,
-    EzMarker,
-    EzInfoWindow
-]
+  EzMapComponent,
+  EzMarkerComponent,
+  EzInfoWindowComponent
+];
 
-// @dynamic
 @NgModule({
-    declarations: reExports,
-    exports: reExports,
-    imports: [
-        CommonModule
-    ]
+  declarations: reExports,
+  exports: reExports,
+  imports: [CommonModule]
 })
 export class EzMapModule {
-    static forRoot(config: AppConfig): ModuleWithProviders{
-        return {
-            ngModule: EzMapModule,
-            providers: [
-                {
-                    provide: EZ_MAP_CONFIG,
-                    useValue: config
-                },
-                {
-                    provide: APP_INITIALIZER,
-                    useFactory: libInit,
-                    deps: [
-                        AppInitService,
-                        EZ_MAP_CONFIG
-                    ],
-                    multi: true
-                },
-                AppInitService,
-                GoogleMaps
-            ]
-        }
-    }
+  static forRoot(config: AppConfig): ModuleWithProviders {
+    return {
+      ngModule: EzMapModule,
+      providers: [
+        {
+          provide: EZ_MAP_CONFIG,
+          useValue: config
+        },
+        {
+          provide: APP_INITIALIZER,
+          useFactory: libInit,
+          deps: [AppInitService, EZ_MAP_CONFIG],
+          multi: true
+        },
+        AppInitService,
+        GoogleMaps
+      ]
+    };
+  }
 }

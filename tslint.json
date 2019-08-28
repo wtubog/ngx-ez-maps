@@ -116,15 +116,15 @@
       "check-type"
     ],
     "directive-selector": [
-      true,
+      false,
       "attribute",
-      "app",
+      "ez",
       "camelCase"
     ],
     "component-selector": [
-      true,
+      false,
       "element",
-      "app",
+      "ez",
       "kebab-case"
     ],
     "use-input-property-decorator": true,

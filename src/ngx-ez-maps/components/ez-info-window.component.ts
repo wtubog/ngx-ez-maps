@@ -1,21 +1,31 @@
-import { OnDestroy, NgZone, Output, EventEmitter } from '@angular/core';
-import { MapManager } from './../map-manager.service';
-import { EzMarker } from './ez-marker.component';
-import { Host, Input, SkipSelf } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ContentChild,
+  ElementRef,
+  EventEmitter,
+  Host,
+  Input,
+  NgZone,
+  OnDestroy,
+  OnInit,
+  Output
+} from '@angular/core';
 import { take } from 'rxjs/operators';
-import { AppInitService } from './../app-init.service';
-import { ElementRef } from '@angular/core';
-import { Component, ChangeDetectionStrategy, ViewContainerRef, OnInit, TemplateRef, ContentChild } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
+import { AppInitService } from './../app-init.service';
+import { MapManager } from './../map-manager.service';
+import { EzMarkerComponent } from './ez-marker.component';
 
 @Component({
   selector: 'ez-info-window',
-  template: `<ng-content></ng-content>`,
+  template: `
+    <ng-content></ng-content>
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class EzInfoWindow implements OnInit, OnDestroy {
-
-  @ContentChild('infoWindow', {read: ElementRef})
+export class EzInfoWindowComponent implements OnInit, OnDestroy {
+  @ContentChild('infoWindow', { read: ElementRef, static: true })
   private _infowWindowTemplate: ElementRef;
 
   private _infoWindow: google.maps.InfoWindow;
@@ -55,35 +65,38 @@ export class EzInfoWindow implements OnInit, OnDestroy {
   constructor(
     private _as: AppInitService,
     private _mapManager: MapManager,
-    @Host() private _marker: EzMarker,
+    @Host() private _marker: EzMarkerComponent,
     private _zone: NgZone
   ) {}
 
   ngOnInit() {
-    this._as.isGooglemapsReady
-      .pipe(take(1))
-      .subscribe(() => {
-        console.log(this.isOpen);
-          this._infoWindow = this._zone.runOutsideAngular(() => {
-            return new google.maps.InfoWindow({
-              content: this._infowWindowTemplate.nativeElement
-            })
-          });
-          this.isOpen && this.open();
-          this._bindInfoWindowEvents();
+    this._as.isGooglemapsReady.pipe(take(1)).subscribe(() => {
+      console.log(this.isOpen);
+      this._infoWindow = this._zone.runOutsideAngular(() => {
+        return new google.maps.InfoWindow({
+          content: this._infowWindowTemplate.nativeElement
+        });
       });
+      if (this.isOpen) {
+        this.open();
+      }
+      this._bindInfoWindowEvents();
+    });
 
-    this._mapClickListener$ = this._mapManager.mapClicked.asObservable()
-      .subscribe(() =>
-        this.closeOnMapClicked && this.close());
+    this._mapClickListener$ = this._mapManager.mapClicked
+      .asObservable()
+      .subscribe(() => this.closeOnMapClicked && this.close());
 
-    this._markerClickListener$ = this._mapManager.markerClicked.asObservable()
-      .subscribe((id) => {
-        this.closeWhenOthersOpened && this.close();
-        if(this._marker.markerId == id){
+    this._markerClickListener$ = this._mapManager.markerClicked
+      .asObservable()
+      .subscribe(id => {
+        if (this.closeWhenOthersOpened) {
+          this.close();
+        }
+        if (this._marker.markerId === id) {
           this.open();
         }
-    });
+      });
   }
 
   /**
@@ -93,8 +106,8 @@ export class EzInfoWindow implements OnInit, OnDestroy {
   open() {
     this._isOpen = true;
     this._infoWindow.open(
-        this._mapManager.mapInstance,
-        this._mapManager.markers[this._marker.markerId]
+      this._mapManager.mapInstance,
+      this._mapManager.markers[this._marker.markerId]
     );
   }
 
@@ -103,7 +116,9 @@ export class EzInfoWindow implements OnInit, OnDestroy {
    */
 
   close() {
-    this._isOpen && this.onClose.next();
+    if (this._isOpen) {
+      this.onClose.next();
+    }
     this._isOpen = false;
     this._infoWindow.close();
   }
@@ -116,8 +131,7 @@ export class EzInfoWindow implements OnInit, OnDestroy {
 
   private _bindInfoWindowEvents() {
     this._infoWindow.addListener('closeclick', () => {
-      this.close()
-    })
+      this.close();
+    });
   }
-
 }
